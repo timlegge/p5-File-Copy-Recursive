@@ -96,8 +96,11 @@ sub _test {
                 system("/bin/mkdir -p moved/$func/$parent") and die "could not toggle dir/symlink (mkdir): $?\n";
             }
 
+            my $src  = "$dir/$func" . ( $toggle ? "/$toggle" : "" );
+            my $dest = "$dir/moved/$func" . ( $toggle ? "/$toggle" : "" );
             # use system call since the perl to do this will likely use File::Spec
-            system("/bin/mv $dir/$func/$toggle $dir/moved/$func/$toggle") and die "could not toggle dir/symlink (mv): $?\n";
+            system("/bin/mv $src $dest") and die "could not toggle dir/symlink (mv): $?\n";
+
             symlink( "$dir/victim", "$dir/$func" . ( $toggle ? "/$toggle" : "" ) ) or die "could not toggle dir/symlink (sym): $!\n";
 
             chdir "$func/cwd" || die "could not toggle dir/symlink (back into $func/cwd): $!\n";
